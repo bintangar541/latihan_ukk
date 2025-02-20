@@ -58,18 +58,27 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'price' => 'required|string', // Validasi sebagai string karena ada format "Rp"
             'stock' => 'required|integer',
-            'price' => 'required|integer',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|max:2048', // Maksimal ukuran 2MB
         ]);
+    
+        // Hapus "Rp", spasi, dan titik pemisah ribuan pada harga
+        $price = str_replace(['Rp', ' ', '.'], '', $request->price);
     
         $product = Product::findOrFail($id);
         $product->name = $request->name;
+        $product->price = $price;
         $product->stock = $request->stock;
-        $product->price = $request->price;
     
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
+            // Hapus gambar lama jika ada
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+    
+            // Upload gambar baru
+            $imagePath = $request->file('image')->store('products', 'public');
             $product->image = $imagePath;
         }
     
@@ -77,6 +86,8 @@ class ProductController extends Controller
     
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
     }
+    
+    
 
     public function upgradeStock(Request $request, $id)
 {

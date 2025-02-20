@@ -18,7 +18,7 @@
 
             <div class="mb-3">
                 <label class="form-label fw-semibold">Harga</label>
-                <input type="number" name="price" class="form-control" value="{{ $product->price }}" required>
+                <input type="text" name="price" id="price" class="form-control" value="{{ number_format($product->price, 0, ',', '.') }}" required>
             </div>
 
             <div class="mb-3">
@@ -41,4 +41,38 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const priceInput = document.querySelector('input[name="price"]');
+    
+        // Fungsi untuk memformat angka dengan "Rp" saat halaman dimuat
+        function formatPriceInput() {
+            let value = priceInput.value.replace(/[^0-9]/g, ""); // Hanya angka
+            if (value) {
+                priceInput.value = "Rp " + parseInt(value).toLocaleString("id-ID");
+            }
+        }
+    
+        // Jalankan format harga saat halaman pertama kali dimuat
+        formatPriceInput();
+    
+        // Event listener saat user mengetik di input harga
+        priceInput.addEventListener("input", function () {
+            let value = this.value.replace(/[^0-9]/g, ""); // Hanya angka
+            if (value) {
+                this.value = "Rp " + parseInt(value).toLocaleString("id-ID");
+            } else {
+                this.value = ""; // Jika kosong, Rp tidak muncul
+            }
+        });
+    
+        // Hapus format "Rp" sebelum form dikirim ke server
+        document.querySelector("form").addEventListener("submit", function () {
+            priceInput.value = priceInput.value.replace(/Rp\s?|[^0-9]/g, "");
+        });
+    });
+    </script>
+    
+    
 @endsection
