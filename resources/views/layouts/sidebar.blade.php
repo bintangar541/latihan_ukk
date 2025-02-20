@@ -21,16 +21,20 @@
                     <i class="fa fa-shopping-cart me-2"></i> Pembelian
                 </a>
             </li>
-            <li>
-                <a href="{{ route('users.index') }}" class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
-                    <i class="fa fa-users me-2"></i> User
-                </a>
-            </li>
+
+            <!-- Hanya Admin yang Bisa Melihat Menu User -->
+            @if(auth()->user()->role === 'admin')
+                <li>
+                    <a href="{{ route('users.index') }}" class="nav-link {{ request()->is('users*') ? 'active' : '' }}">
+                        <i class="fa fa-users me-2"></i> User
+                    </a>
+                </li>
+            @endif
         </ul>
     </div>
-    
+
     <hr>
-    
+
     <!-- Logout di Sidebar -->
     <div class="text-center">
         <form action="{{ route('logout') }}" method="POST">

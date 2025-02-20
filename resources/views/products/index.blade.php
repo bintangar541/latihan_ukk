@@ -6,7 +6,10 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">Daftar Produk</h2>
-        <a href="{{ route('products.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah Produk</a>
+
+        @if(auth()->user()->role === 'admin')
+            <a href="{{ route('products.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah Produk</a>
+        @endif
     </div>
 
     @if(session('success'))
@@ -21,7 +24,9 @@
                     <th>Produk</th>
                     <th>Harga</th>
                     <th>Stok</th>
-                    <th>Aksi</th>
+                    @if(auth()->user()->role === 'admin')
+                        <th>Aksi</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -36,6 +41,8 @@
                     </td>
                     <td class="text-success fw-semibold">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
                     <td id="stock-{{ $product->id }}">{{ $product->stock }}</td>
+
+                    @if(auth()->user()->role === 'admin')
                     <td>
                         <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Edit</a>
                         <button class="btn btn-sm btn-info upgrade-stock-btn" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-stock="{{ $product->stock }}"><i class="fas fa-plus"></i> Upgrade Stok</button>
@@ -45,6 +52,7 @@
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus produk ini?')"><i class="fas fa-trash"></i> Hapus</button>
                         </form>
                     </td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>
@@ -52,6 +60,7 @@
     </div>
 </div>
 
+@if(auth()->user()->role === 'admin')
 <!-- Modal Upgrade Stok -->
 <div class="modal fade" id="upgradeStockModal" tabindex="-1" aria-labelledby="upgradeStockModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -76,7 +85,7 @@
     </div>
 </div>
 
-<!-- Script AJAX -->
+<!-- Script AJAX untuk Upgrade Stok -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         let modal = new bootstrap.Modal(document.getElementById('upgradeStockModal'));
@@ -89,7 +98,7 @@
 
                 document.getElementById("product-id").value = productId;
                 document.getElementById("product-name").innerText = productName;
-                
+
                 let stockInput = document.getElementById("additional-stock");
                 stockInput.value = currentStock;
                 stockInput.min = 1;
@@ -123,4 +132,5 @@
         });
     });
 </script>
+@endif
 @endsection
