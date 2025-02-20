@@ -11,22 +11,22 @@ class Purchase extends Model
 
     protected $table = 'purchases';
     protected $fillable = [
-        'products_id', 'user_id', 'member_id',
-        'total_price', 'total_payment', 'change'
+        'products_id', 'user_id', 'member_id', 'total_price', 'total_payment', 'change'
     ];
+
     public function product()
-{
-    return $this->belongsTo(Product::class, 'products_id');
-}
+    {
+        return $this->belongsTo(Product::class, 'products_id');
+    }
 
-public function user()
-{
-    return $this->belongsTo(User::class, 'user_id');
-}
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id'); // Pastikan kolom 'user_id' digunakan
+    }
+    
 
-public function member()
-{
-    return $this->belongsTo(Member::class, 'member_id');
-}
-
+    public function member()
+    {
+        return $this->belongsTo(Member::class, 'member_id');
+    }
 }

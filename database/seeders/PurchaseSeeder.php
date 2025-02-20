@@ -4,27 +4,37 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Purchase;
+use App\Models\User;
+use App\Models\Member;
+use App\Models\Product;
 
 class PurchaseSeeder extends Seeder
 {
     public function run()
     {
+        // Mendapatkan ID user yang valid (misalnya ID pertama)
+        $userId = User::first()->id; // Misalnya kita ambil user pertama sebagai petugas
+        $memberId = Member::first()->id; // Ambil member pertama, bisa disesuaikan
+        $productId = Product::first()->id; // Ambil produk pertama yang ada, bisa disesuaikan
+
+        // Menambahkan data pembelian
         Purchase::create([
-            'products_id' => 1,
-            'user_id' => 1,
-            'member_id' => 1,
-            'total_price' => 5000,
-            'total_payment' => 10000,
-            'change' => 5000
+            'products_id' => $productId,
+            'user_id' => $userId,
+            'member_id' => $memberId,
+            'total_price' => 100000,
+            'total_payment' => 100000,
+            'change' => 0,
         ]);
 
+        // Menambahkan pembelian lainnya
         Purchase::create([
-            'products_id' => 2,
-            'user_id' => 2,
-            'member_id' => 2,
-            'total_price' => 4000,
-            'total_payment' => 5000,
-            'change' => 1000
+            'products_id' => $productId,
+            'user_id' => $userId,
+            'member_id' => $memberId,
+            'total_price' => 150000,
+            'total_payment' => 150000,
+            'change' => 0,
         ]);
     }
 }

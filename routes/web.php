@@ -15,14 +15,13 @@ Route::post('/logout', function () {
     return redirect()->route('login');
 })->name('logout');
 
-
 // Rute yang membutuhkan autentikasi
 Route::middleware(['auth'])->group(function () {
+
     // Dashboard
     Route::get('/dashboard', function () {
         return view('dashboard.index');
     })->name('dashboard');
-
 
     // Produk
     Route::resource('products', ProductController::class);
@@ -30,7 +29,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Pembelian
     Route::resource('purchase', PurchaseController::class);
-
+    Route::get('purchases/export', [PurchaseController::class, 'export'])->name('purchases.export');
     // Pengguna
     Route::resource('users', UserController::class);
 });
