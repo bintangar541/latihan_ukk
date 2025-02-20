@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -17,13 +18,13 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
-    // Menampilkan form untuk membuat pengguna baru
+    // Menampilkan form tambah user
     public function create()
     {
         return view('users.create');
     }
 
-    // Menyimpan pengguna baru
+    // Menyimpan user baru
     public function store(Request $request)
     {
         $request->validate([
@@ -36,21 +37,21 @@ class UserController extends Controller
         User::create([
             'username' => $request->username,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
 
         return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan');
     }
 
-    // Menampilkan form untuk mengedit pengguna
+    // Menampilkan form edit user
     public function edit($id)
     {
         $user = User::findOrFail($id);
         return view('users.edit', compact('user'));
     }
 
-    // Menyimpan perubahan pengguna
+    // Update user
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -65,7 +66,7 @@ class UserController extends Controller
         $user->email = $request->email;
 
         if ($request->filled('password')) {
-            $user->password = bcrypt($request->password);
+            $user->password = Hash::make($request->password);
         }
 
         $user->role = $request->role;
@@ -74,7 +75,7 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Pengguna berhasil diperbarui');
     }
 
-    // Menghapus pengguna
+    // Hapus user
     public function destroy($id)
     {
         User::findOrFail($id)->delete();

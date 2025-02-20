@@ -22,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard.index');
     })->name('dashboard');
-    
+
 
     // Produk
     Route::resource('products', ProductController::class);

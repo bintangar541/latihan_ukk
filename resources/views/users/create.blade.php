@@ -6,6 +6,16 @@
 <div class="container my-4">
     <h3 class="mb-4">Tambah Pengguna</h3>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('users.store') }}" method="POST">
         @csrf
 
@@ -22,6 +32,11 @@
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <input type="password" name="password" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
+            <input type="password" name="password_confirmation" class="form-control" required>
         </div>
 
         <div class="mb-3">
